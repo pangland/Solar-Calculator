@@ -22,7 +22,7 @@ class GMap extends React.Component {
   }
 
   componentDidMount() {
-    // generate map, geocoder, and draw event function
+    // generate map, geocoder, and drawingmanager
     this.map = new google.maps.Map(this.refs.map, mapOptions);
     this.geocoder = new google.maps.Geocoder();
 
@@ -39,6 +39,14 @@ class GMap extends React.Component {
   beginPolygon() {
     this.drawingManager.setMap(this.map);
     this.drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
+
+    // couldn't figure out a nicer way to terminate drawing mode than this:
+    google.maps.event.addListener(this.drawingManager, 'overlaycomplete', (e) => {
+      this.drawingManager.setDrawingMode(null);
+
+      const area = google.maps.geometry.spherical.computeArea(e.overlay.getPath());
+      console.log(area);
+    });
   }
 
   setStartingSearchData (input) {
