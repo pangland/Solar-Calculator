@@ -20,7 +20,12 @@ class GMap extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.beginPolygon = this.beginPolygon.bind(this);
     this.deletePolygon = this.deletePolygon.bind(this);
-    this.state = { areas: [] };
+
+    this.state = {
+      areas: [],
+      lifelongPolygonCount: 0,
+      selected: -1
+    };
   }
 
   componentDidMount() {
@@ -42,15 +47,23 @@ class GMap extends React.Component {
 
       const area = google.maps.geometry.spherical.computeArea(e.overlay.getPath());
       const newAreaList = this.state.areas;
-      newAreaList.push(area);
-      debugger;
-      this.setState( {areas: newAreaList } )
-      console.log(area);
 
       google.maps.event.addListener(e.overlay, 'click', () => {
         this.setCurrentShape(e.overlay);
-      })
+      });
+
       this.setCurrentShape(e.overlay);
+
+      const currentShape = this.currentShape;
+      const newPolyCount = this.state.lifelongPolygonCount + 1;
+      newAreaList.push({[newPolyCount]: [area, currentShape]});
+      this.setState({
+        areas: newAreaList,
+        lifelongPolygonCount: newPolyCount,
+        selected: newPolyCount
+      });
+
+      debugger;
     });
   }
 
@@ -62,9 +75,19 @@ class GMap extends React.Component {
   }
 
   deletePolygon() {
+    // remove polygon from state
+    for (let i = 0; i < this.state.areas.length; i++) {
+      if (Object.values(this.state.areas[i])[0][1] === this.currentShape) {
+        this.state.areas.splice(i, 1);
+        break;
+      }
+    }
+
     if (this.currentShape) {
       this.currentShape.setMap(null);
     }
+
+    this.setState(this.state);
   }
 
   setCurrentShape(shape) {
@@ -74,6 +97,15 @@ class GMap extends React.Component {
 
     this.currentShape = shape;
     this.currentShape.setEditable(true);
+
+    let newSelected;
+    for (let i = 0; i < this.state.areas.length; i++) {
+      if (this.currentShape === Object.values(this.state.areas[i])[0][1]) {
+        newSelected = parseInt(Object.keys(this.state.areas[i])[0]);
+      }
+    }
+
+    this.setState({ selected: newSelected});
   }
 
   setStartingSearchData (input) {
@@ -111,11 +143,15 @@ class GMap extends React.Component {
       border: '1px solid black'
     };
 
-    console.log(this.state);
-    debugger;
     const areas = this.state.areas.map((area, index) => {
+      const actualArea = Object.values(area)[0][0];
+      const shapeNum = parseInt(Object.keys(area)[0]);
+      const className = this.state.selected === shapeNum ? "selected" : "";
+
       return (
-        <li key={index}>{area}</li>
+        <li className={className} key={index}>
+          Polygon {shapeNum}: {actualArea} square meters
+        </li>
       );
     });
 
