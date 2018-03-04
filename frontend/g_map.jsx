@@ -5,13 +5,20 @@ const mapOptions = {
   zoom: 17
 };
 
+const polyOptions = {
+  strokeWeight: 0,
+  fillOpacity: 0.5,
+  editable: true,
+  fillColor: 'orange'
+};
+
 class GMap extends React.Component {
   constructor(props) {
     super(props);
 
     this.setStartingSearchData = this.setStartingSearchData.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleClick = this.handleClick.bind(this);
+    this.beginPolygon = this.beginPolygon.bind(this);
   }
 
   componentDidMount() {
@@ -19,18 +26,23 @@ class GMap extends React.Component {
     this.map = new google.maps.Map(this.refs.map, mapOptions);
     this.geocoder = new google.maps.Geocoder();
 
-    this.map.addListener('click', (e) => {
-      this.handleDraw(e.latLng, this.map);
+    this.drawingManager = new google.maps.drawing.DrawingManager({
+      drawingMode: google.maps.drawing.OverlayType.POLYGON,
+      drawingControl: false,
+      markerOptions: {
+        draggable: true
+      },
+      polygonOptions: polyOptions
     });
   }
 
-  handleDraw() {
-    console.log('test');
+  beginPolygon() {
+    this.drawingManager.setMap(this.map);
+    this.drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
   }
 
   setStartingSearchData (input) {
     // this function is based on work here: http://react.tips/reactjs-and-geocoding/
-    debugger
     this.searchInputElement = input;
   }
 
@@ -38,10 +50,6 @@ class GMap extends React.Component {
     e.preventDefault();
     const address = this.searchInputElement.value;
     this.geocodeAddress(address);
-  }
-
-  handleClick(e) {
-    this.constructPolygon()
   }
 
   geocodeAddress(address) {
@@ -76,7 +84,11 @@ class GMap extends React.Component {
           <button onClick={this.handleSubmit}> Search </button>
         </div>
 
-        <div ref="map" style={mapStyle} onClick={this.handleClick}>
+        <div className="polygon-buttons">
+          <button onClick={this.beginPolygon}> Select Area </button>
+        </div>
+
+        <div ref="map" style={mapStyle}>
           Temp Input
         </div>
       </div>
