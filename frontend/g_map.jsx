@@ -36,6 +36,18 @@ class GMap extends React.Component {
       },
       polygonOptions: polyOptions
     });
+
+    google.maps.event.addListener(this.drawingManager, 'overlaycomplete', (e) => {
+      this.drawingManager.setDrawingMode(null);
+
+      const area = google.maps.geometry.spherical.computeArea(e.overlay.getPath());
+      console.log(area);
+
+      google.maps.event.addListener(e.overlay, 'click', () => {
+        this.setCurrentShape(e.overlay);
+      })
+      this.setCurrentShape(e.overlay);
+    });
   }
 
   beginPolygon() {
@@ -43,12 +55,6 @@ class GMap extends React.Component {
     this.drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
 
     // couldn't figure out a nicer way to terminate drawing mode than this:
-    google.maps.event.addListener(this.drawingManager, 'overlaycomplete', (e) => {
-      this.drawingManager.setDrawingMode(null);
-
-      const area = google.maps.geometry.spherical.computeArea(e.overlay.getPath());
-      this.setCurrentShape(e.overlay);
-    });
   }
 
   deletePolygon() {
