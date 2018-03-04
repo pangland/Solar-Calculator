@@ -20,7 +20,7 @@ class GMap extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.beginPolygon = this.beginPolygon.bind(this);
     this.deletePolygon = this.deletePolygon.bind(this);
-    this.state = { shapes: [] };
+    this.state = { areas: [] };
   }
 
   componentDidMount() {
@@ -41,6 +41,10 @@ class GMap extends React.Component {
       this.drawingManager.setDrawingMode(null);
 
       const area = google.maps.geometry.spherical.computeArea(e.overlay.getPath());
+      const newAreaList = this.state.areas;
+      newAreaList.push(area);
+      debugger;
+      this.setState( {areas: newAreaList } )
       console.log(area);
 
       google.maps.event.addListener(e.overlay, 'click', () => {
@@ -107,7 +111,13 @@ class GMap extends React.Component {
       border: '1px solid black'
     };
 
-
+    console.log(this.state);
+    debugger;
+    const areas = this.state.areas.map((area, index) => {
+      return (
+        <li key={index}>{area}</li>
+      );
+    });
 
     return (
       <div>
@@ -125,6 +135,10 @@ class GMap extends React.Component {
         <div ref="map" style={mapStyle}>
           Temp Input
         </div>
+
+        <ul>
+          {areas}
+        </ul>
       </div>
     );
   }
