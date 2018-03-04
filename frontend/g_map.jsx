@@ -19,6 +19,8 @@ class GMap extends React.Component {
     this.setStartingSearchData = this.setStartingSearchData.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.beginPolygon = this.beginPolygon.bind(this);
+    this.deletePolygon = this.deletePolygon.bind(this);
+    this.state = { shapes: [] };
   }
 
   componentDidMount() {
@@ -45,8 +47,23 @@ class GMap extends React.Component {
       this.drawingManager.setDrawingMode(null);
 
       const area = google.maps.geometry.spherical.computeArea(e.overlay.getPath());
-      console.log(area);
+      this.setCurrentShape(e.overlay);
     });
+  }
+
+  deletePolygon() {
+    if (this.currentShape) {
+      this.currentShape.setMap(null);
+    }
+  }
+
+  setCurrentShape(shape) {
+    if (this.currentShape) {
+      this.currentShape.setEditable(false);
+    }
+
+    this.currentShape = shape;
+    this.currentShape.setEditable(true);
   }
 
   setStartingSearchData (input) {
@@ -84,6 +101,8 @@ class GMap extends React.Component {
       border: '1px solid black'
     };
 
+
+
     return (
       <div>
         <div className="form-group">
@@ -94,6 +113,7 @@ class GMap extends React.Component {
 
         <div className="polygon-buttons">
           <button onClick={this.beginPolygon}> Select Area </button>
+          <button onClick={this.deletePolygon}> Delete Area </button>
         </div>
 
         <div ref="map" style={mapStyle}>
