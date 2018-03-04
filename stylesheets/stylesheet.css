@@ -1,17 +1,1 @@
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  color: rgb(51, 122, 183);
-  margin-top: 15px;
-  margin-left: 10px;
-  marign-right: 10px;
-}
 
-.navbar-left {
-}
-
-.navbar-right {
-  width: 30%;
-  display flex;
-  justify-content: space-around;
-}
