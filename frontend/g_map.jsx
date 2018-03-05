@@ -191,7 +191,7 @@ class GMap extends React.Component {
           Temp Input
         </div>
 
-        <table>
+        <table className={this.state.shapes.length > 0 ? "" : "hide"}>
           <tr>
             <th>&nbsp;</th>
             <th>Area</th>
