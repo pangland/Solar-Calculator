@@ -1,4 +1,5 @@
 import React from 'react';
+import { calculateNominalPower } from '../util/nominal_power.js';
 
 const mapOptions = {
   center: { lat: 42.381671, lng: -71.078107},
@@ -147,19 +148,26 @@ class GMap extends React.Component {
     };
 
     let totalArea = 0;
+    let totalNominalPower = 0;
 
     const shapes = this.state.shapes.map((shape, index) => {
       const actualArea = Object.values(shape)[0][0];
       const shapeNum = parseInt(Object.keys(shape)[0]);
       const className = this.state.selected === shapeNum ? "selected" : "";
+      const nominalPower = calculateNominalPower(actualArea);
 
       totalArea += actualArea;
+      totalNominalPower += nominalPower;
 
       return (
-        <tr className={className} key={shapeNum} onClick={this.handleSelect.bind(this, shapeNum)}>
+        <tr
+          className={className}
+          key={shapeNum}
+          onClick={this.handleSelect.bind(this, shapeNum)}>
+
           <th>Polygon {shapeNum}</th>
           <td>{Math.round(actualArea)}</td>
-          <td>EMPTY</td>
+          <td>{Math.round(nominalPower)}</td>
         </tr>
       );
     });
@@ -189,14 +197,14 @@ class GMap extends React.Component {
         <table className={this.state.shapes.length > 0 ? "" : "hide"}>
           <tr>
             <th>&nbsp;</th>
-            <th>Area</th>
-            <th>Nominal Power</th>
+            <th>Area (m^2)</th>
+            <th>Nominal Power (kW)</th>
           </tr>
           {shapes}
           <tr>
             <th>Total</th>
             <td>{Math.round(totalArea)}</td>
-            <td>EMPTY</td>
+            <td>{Math.round(totalNominalPower)}</td>
           </tr>
         </table>
       </div>
