@@ -35,22 +35,22 @@ class GMap extends React.Component {
     // generate map, geocoder, and drawingmanager
     this.map = new google.maps.Map(this.refs.map, mapOptions);
     this.geocoder = new google.maps.Geocoder();
-
     this.drawingManager = new google.maps.drawing.DrawingManager({
       drawingMode: google.maps.drawing.OverlayType.POLYGON,
       drawingControl: false,
-      markerOptions: {
-        draggable: true
-      },
+      markerOptions: { draggable: true },
       polygonOptions: polyOptions
     });
 
+    // this method and approach informed from code herein: http://jsfiddle.net/89u6owsz/
     google.maps.event.addListener(this.drawingManager, 'overlaycomplete', (e) => {
+      // deactivate drawing mode
       this.drawingManager.setDrawingMode(null);
 
+      // calculate area of polygon
       const area = google.maps.geometry.spherical.computeArea(e.overlay.getPath());
-      const newAreaList = this.state.shapes;
 
+      // add event listener for selecting already completed polygon
       google.maps.event.addListener(e.overlay, 'click', () => {
         this.setCurrentShape(e.overlay);
       });
@@ -59,7 +59,9 @@ class GMap extends React.Component {
 
       const currentShape = this.currentShape;
       const newPolyCount = this.state.lifelongPolygonCount + 1;
+      const newAreaList = this.state.shapes;
       newAreaList.push({[newPolyCount]: [area, currentShape]});
+
       this.setState({
         shapes: newAreaList,
         lifelongPolygonCount: newPolyCount,
@@ -71,8 +73,6 @@ class GMap extends React.Component {
   beginPolygon() {
     this.drawingManager.setMap(this.map);
     this.drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
-
-    // couldn't figure out a nicer way to terminate drawing mode than this:
   }
 
   deletePolygon() {
@@ -99,6 +99,7 @@ class GMap extends React.Component {
     this.currentShape = shape;
     this.currentShape.setEditable(true);
 
+    // declare a new 'selected polygon'
     let newSelected;
     for (let i = 0; i < this.state.shapes.length; i++) {
       if (this.currentShape === Object.values(this.state.shapes[i])[0][1]) {
@@ -121,6 +122,7 @@ class GMap extends React.Component {
   }
 
   handleSelect(shapeNum, e) {
+    // update state's selected polygon
     for (let i = 0; i < this.state.shapes.length; i++) {
       if (parseInt(Object.keys(this.state.shapes[i])[0]) === shapeNum) {
         this.setCurrentShape(Object.values(this.state.shapes[i])[0][1]);
@@ -129,18 +131,10 @@ class GMap extends React.Component {
   }
 
   geocodeAddress(address) {
-    // this function is based on work here: http://react.tips/reactjs-and-geocoding/
+    // this function is informed from work here: http://react.tips/reactjs-and-geocoding/
     this.geocoder.geocode({ 'address': address }, (results, status) => {
       if (status === google.maps.GeocoderStatus.OK) {
-
-        this.setState({
-          foundAddress: results[0].formatted_address,
-          isGeocodingError: false
-        });
-
         this.map.setCenter(results[0].geometry.location);
-
-        return;
       }
     });
   }
@@ -148,7 +142,7 @@ class GMap extends React.Component {
   render() {
     const mapStyle = {
       width: 800,
-      height: 500,
+      height: 400,
       border: '1px solid black'
     };
 
@@ -162,9 +156,6 @@ class GMap extends React.Component {
       totalArea += actualArea;
 
       return (
-        // <li className={className} key={shapeNum} onClick={this.handleSelect.bind(this, shapeNum)}>
-        //   Polygon {shapeNum}: {Math.round(actualArea)} square meters
-        // </li>
         <tr className={className} key={shapeNum} onClick={this.handleSelect.bind(this, shapeNum)}>
           <th>Polygon {shapeNum}</th>
           <td>{Math.round(actualArea)}</td>
@@ -178,7 +169,11 @@ class GMap extends React.Component {
         <h3>Paul Angland Solar Calculator Prototype</h3>
         <p>Use the "select area" prompt to draw a polygon representing solar panel placements.</p>
         <form className="form-group">
-          <input type="text" id="address" placeholder="Enter a new address" ref={this.setInput} required />
+          <input type="text"
+            id="address"
+            placeholder="Enter a new address"
+            ref={this.setInput}
+            required />
           <button onClick={this.handleSubmit}> Search </button>
         </form>
 

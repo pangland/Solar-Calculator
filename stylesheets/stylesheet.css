@@ -32,25 +32,8 @@ ul {
   list-style: none;
 }
 
-.hide {
-  display: none;
-}
-
-.map {
-  margin-bottom: 10px;
-}
-
-.selected {
-  font-weight: bold;
-}
-
 .data {
   cursor: pointer;
-}
-
-.parent-div {
-  width: 800px;
-  margin: 0 auto;
 }
 
 .form-group {
@@ -68,4 +51,21 @@ ul {
 
 .form-group > button {
   width: 20%;
+}
+
+.hide {
+  display: none;
+}
+
+.map {
+  margin-bottom: 10px;
+}
+
+.parent-div {
+  width: 800px;
+  margin: 0 auto;
+}
+
+.selected {
+  font-weight: bold;
 }
