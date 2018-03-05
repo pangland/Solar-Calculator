@@ -153,7 +153,7 @@ class GMap extends React.Component {
     const shapes = this.state.shapes.map((shape, index) => {
       const actualArea = Object.values(shape)[0][0];
       const shapeNum = parseInt(Object.keys(shape)[0]);
-      const className = this.state.selected === shapeNum ? "selected" : "";
+      const className = this.state.selected === shapeNum ? "selected data" : "data";
       const nominalPower = calculateNominalPower(actualArea);
 
       totalArea += actualArea;

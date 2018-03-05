@@ -1,5 +1,5 @@
 export const calculateNominalPower = (area) => {
-  const efficiency = .22; // found solar panels this efficient under standard test conditions
+  const wattagePerMeter = 150; // values taken from seemingly reputable
 
-  return efficiency * (area * 1.0) * .001;
+  return wattagePerMeter * area * .001;
 };
