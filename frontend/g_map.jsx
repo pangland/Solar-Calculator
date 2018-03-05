@@ -1,8 +1,10 @@
 import React from 'react';
 
 const mapOptions = {
-  center: { lat: 42.346268, lng: -71.095764 },
-  zoom: 17
+  center: { lat: 42.381671, lng: -71.078107},
+  zoom: 19,
+  mapTypeId: 'hybrid',
+  labels: true
 };
 
 const polyOptions = {
@@ -16,7 +18,7 @@ class GMap extends React.Component {
   constructor(props) {
     super(props);
 
-    this.setStartingSearchData = this.setStartingSearchData.bind(this);
+    this.setInput = this.setInput.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.beginPolygon = this.beginPolygon.bind(this);
     this.deletePolygon = this.deletePolygon.bind(this);
@@ -107,7 +109,7 @@ class GMap extends React.Component {
     this.setState({ selected: newSelected});
   }
 
-  setStartingSearchData (input) {
+  setInput (input) {
     // this function is based on work here: http://react.tips/reactjs-and-geocoding/
     this.searchInputElement = input;
   }
@@ -167,7 +169,7 @@ class GMap extends React.Component {
         <h3>Paul Angland Solar Calculator Prototype</h3>
         <p>Use the "select area" prompt to draw a polygon representing solar panel placements.</p>
         <div className="form-group">
-          <input type="text" id="address" placeholder="Paris, France" ref={this.setStartingSearchData} required />
+          <input type="text" id="address" placeholder="Enter a new address" ref={this.setInput} required />
           <button onClick={this.handleSubmit}> Search </button>
         </div>
 
