@@ -159,7 +159,7 @@ class GMap extends React.Component {
 
       return (
         <li className={className} key={shapeNum} onClick={this.handleSelect.bind(this, shapeNum)}>
-          Polygon {shapeNum}: {actualArea} square meters
+          Polygon {shapeNum}: {Math.round(actualArea)} square meters
         </li>
       );
     });
