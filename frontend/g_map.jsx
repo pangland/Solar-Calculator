@@ -160,6 +160,7 @@ class GMap extends React.Component {
       return (
         <li className={className} key={shapeNum} onClick={this.handleSelect.bind(this, shapeNum)}>
           Polygon {shapeNum}: {Math.round(actualArea)} square meters
+
         </li>
       );
     });
@@ -168,10 +169,10 @@ class GMap extends React.Component {
       <div className='parent-div'>
         <h3>Paul Angland Solar Calculator Prototype</h3>
         <p>Use the "select area" prompt to draw a polygon representing solar panel placements.</p>
-        <div className="form-group">
+        <form className="form-group">
           <input type="text" id="address" placeholder="Enter a new address" ref={this.setInput} required />
           <button onClick={this.handleSubmit}> Search </button>
-        </div>
+        </form>
 
         <div className="polygon-buttons">
           <button onClick={this.beginPolygon}> Select Area </button>
