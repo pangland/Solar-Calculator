@@ -20,9 +20,10 @@ class GMap extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.beginPolygon = this.beginPolygon.bind(this);
     this.deletePolygon = this.deletePolygon.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
 
     this.state = {
-      areas: [],
+      shapes: [],
       lifelongPolygonCount: 0,
       selected: -1
     };
@@ -46,7 +47,7 @@ class GMap extends React.Component {
       this.drawingManager.setDrawingMode(null);
 
       const area = google.maps.geometry.spherical.computeArea(e.overlay.getPath());
-      const newAreaList = this.state.areas;
+      const newAreaList = this.state.shapes;
 
       google.maps.event.addListener(e.overlay, 'click', () => {
         this.setCurrentShape(e.overlay);
@@ -58,12 +59,10 @@ class GMap extends React.Component {
       const newPolyCount = this.state.lifelongPolygonCount + 1;
       newAreaList.push({[newPolyCount]: [area, currentShape]});
       this.setState({
-        areas: newAreaList,
+        shapes: newAreaList,
         lifelongPolygonCount: newPolyCount,
         selected: newPolyCount
       });
-
-      debugger;
     });
   }
 
@@ -76,9 +75,9 @@ class GMap extends React.Component {
 
   deletePolygon() {
     // remove polygon from state
-    for (let i = 0; i < this.state.areas.length; i++) {
-      if (Object.values(this.state.areas[i])[0][1] === this.currentShape) {
-        this.state.areas.splice(i, 1);
+    for (let i = 0; i < this.state.shapes.length; i++) {
+      if (Object.values(this.state.shapes[i])[0][1] === this.currentShape) {
+        this.state.shapes.splice(i, 1);
         break;
       }
     }
@@ -99,9 +98,9 @@ class GMap extends React.Component {
     this.currentShape.setEditable(true);
 
     let newSelected;
-    for (let i = 0; i < this.state.areas.length; i++) {
-      if (this.currentShape === Object.values(this.state.areas[i])[0][1]) {
-        newSelected = parseInt(Object.keys(this.state.areas[i])[0]);
+    for (let i = 0; i < this.state.shapes.length; i++) {
+      if (this.currentShape === Object.values(this.state.shapes[i])[0][1]) {
+        newSelected = parseInt(Object.keys(this.state.shapes[i])[0]);
       }
     }
 
@@ -117,6 +116,14 @@ class GMap extends React.Component {
     e.preventDefault();
     const address = this.searchInputElement.value;
     this.geocodeAddress(address);
+  }
+
+  handleSelect(shapeNum, e) {
+    for (let i = 0; i < this.state.shapes.length; i++) {
+      if (parseInt(Object.keys(this.state.shapes[i])[0]) === shapeNum) {
+        this.setCurrentShape(Object.values(this.state.shapes[i])[0][1]);
+      }
+    }
   }
 
   geocodeAddress(address) {
@@ -138,27 +145,28 @@ class GMap extends React.Component {
 
   render() {
     const mapStyle = {
-      width: 500,
-      height: 300,
+      width: 800,
+      height: 500,
       border: '1px solid black'
     };
 
-    const areas = this.state.areas.map((area, index) => {
-      const actualArea = Object.values(area)[0][0];
-      const shapeNum = parseInt(Object.keys(area)[0]);
-      const className = this.state.selected === shapeNum ? "selected" : "";
+    const shapes = this.state.shapes.map((shape, index) => {
+      const actualArea = Object.values(shape)[0][0];
+      const shapeNum = parseInt(Object.keys(shape)[0]);
+      const className = this.state.selected === shapeNum ? "selected data" : "data";
 
       return (
-        <li className={className} key={index}>
+        <li className={className} key={shapeNum} onClick={this.handleSelect.bind(this, shapeNum)}>
           Polygon {shapeNum}: {actualArea} square meters
         </li>
       );
     });
 
     return (
-      <div>
+      <div className='parent-div'>
+        <h3>Paul Angland Solar Calculator Prototype</h3>
+        <p>Use the "select area" prompt to draw a polygon representing solar panel placements.</p>
         <div className="form-group">
-          <label htmlFor="address">Address</label>
           <input type="text" id="address" placeholder="Paris, France" ref={this.setStartingSearchData} required />
           <button onClick={this.handleSubmit}> Search </button>
         </div>
@@ -168,12 +176,12 @@ class GMap extends React.Component {
           <button onClick={this.deletePolygon}> Delete Area </button>
         </div>
 
-        <div ref="map" style={mapStyle}>
+        <div className='map' ref="map" style={mapStyle}>
           Temp Input
         </div>
 
-        <ul>
-          {areas}
+        <ul className='list'>
+          {shapes}
         </ul>
       </div>
     );
