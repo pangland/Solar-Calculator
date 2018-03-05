@@ -152,16 +152,24 @@ class GMap extends React.Component {
       border: '1px solid black'
     };
 
+    let totalArea = 0;
+
     const shapes = this.state.shapes.map((shape, index) => {
       const actualArea = Object.values(shape)[0][0];
       const shapeNum = parseInt(Object.keys(shape)[0]);
-      const className = this.state.selected === shapeNum ? "selected data" : "data";
+      const className = this.state.selected === shapeNum ? "selected" : "";
+
+      totalArea += actualArea;
 
       return (
-        <li className={className} key={shapeNum} onClick={this.handleSelect.bind(this, shapeNum)}>
-          Polygon {shapeNum}: {Math.round(actualArea)} square meters
-
-        </li>
+        // <li className={className} key={shapeNum} onClick={this.handleSelect.bind(this, shapeNum)}>
+        //   Polygon {shapeNum}: {Math.round(actualArea)} square meters
+        // </li>
+        <tr className={className} key={shapeNum} onClick={this.handleSelect.bind(this, shapeNum)}>
+          <th>Polygon {shapeNum}</th>
+          <td>{Math.round(actualArea)}</td>
+          <td>EMPTY</td>
+        </tr>
       );
     });
 
@@ -183,9 +191,19 @@ class GMap extends React.Component {
           Temp Input
         </div>
 
-        <ul className='list'>
+        <table>
+          <tr>
+            <th>&nbsp;</th>
+            <th>Area</th>
+            <th>Nominal Power</th>
+          </tr>
           {shapes}
-        </ul>
+          <tr>
+            <th>Total</th>
+            <td>{Math.round(totalArea)}</td>
+            <td>EMPTY</td>
+          </tr>
+        </table>
       </div>
     );
   }

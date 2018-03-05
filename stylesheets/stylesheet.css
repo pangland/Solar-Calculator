@@ -4,6 +4,24 @@ h3 {
   font-size: 40px;
 }
 
+li {
+  cursor: pointer;
+  font-size: 20px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 800px;
+}
+
+table, th, td {
+    border: 1px solid black;
+}
+
+th, td {
+  padding: 10px;
+}
+
 p {
   font-size: 20px;
 }
@@ -14,10 +32,6 @@ ul {
   list-style: none;
 }
 
-li {
-  cursor: pointer;
-  font-size: 20px;
-}
 
 .map {
   margin-bottom: 10px;
