@@ -1,7 +1,7 @@
 {
   "name": "react_template",
   "version": "1.0.0",
-  "description": "",
+  "description": "--- An attempt was made to create an application that would allow users to calculate the approximate nominal power of solar panels placed on a given map. The user is given the power to draw shapes representing collections of solar panels on a map provided by the google map API.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -21,5 +21,13 @@
     "react-dom": "^16.2.0",
     "react-router-dom": "^4.2.2",
     "webpack": "^3.10.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pangland/Solar-Calculator.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pangland/Solar-Calculator/issues"
+  },
+  "homepage": "https://github.com/pangland/Solar-Calculator#readme"
 }
