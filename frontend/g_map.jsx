@@ -58,15 +58,14 @@ class GMap extends React.Component {
 
       this.setCurrentShape(e.overlay);
 
-      const currentShape = this.currentShape;
-      const newPolyCount = this.state.lifelongPolygonCount + 1;
+      const currentPolygon = this.currentPolygon;
       const newAreaList = this.state.shapes;
-      newAreaList.push({[newPolyCount]: [area, currentShape]});
+
+      newAreaList.push({polygon: currentPolygon, area: area});
 
       this.setState({
         shapes: newAreaList,
-        lifelongPolygonCount: newPolyCount,
-        selected: newPolyCount
+        selected: newAreaList.length - 1
       });
     });
   }
@@ -78,37 +77,34 @@ class GMap extends React.Component {
 
   deletePolygon() {
     // remove polygon from state
-    for (let i = 0; i < this.state.shapes.length; i++) {
-      if (Object.values(this.state.shapes[i])[0][1] === this.currentShape) {
-        this.state.shapes.splice(i, 1);
-        break;
-      }
+    this.state.shapes[this.state.selected] = null;
+
+    if (this.currentPolygon) {
+      this.currentPolygon.setMap(null);
     }
 
-    if (this.currentShape) {
-      this.currentShape.setMap(null);
-    }
-
-    this.setState(this.state);
+    this.setState( {shapes: this.state.shapes, selected: -1} );
   }
 
   setCurrentShape(shape) {
-    if (this.currentShape) {
-      this.currentShape.setEditable(false);
+    if (this.currentPolygon) {
+      this.currentPolygon.setEditable(false);
     }
 
-    this.currentShape = shape;
-    this.currentShape.setEditable(true);
+    this.currentPolygon = shape;
+    this.currentPolygon.setEditable(true);
 
     // declare a new 'selected polygon'
-    let newSelected;
     for (let i = 0; i < this.state.shapes.length; i++) {
-      if (this.currentShape === Object.values(this.state.shapes[i])[0][1]) {
-        newSelected = parseInt(Object.keys(this.state.shapes[i])[0]);
+      if (this.state.shapes[i] === null) {
+        continue;
+      }
+
+      if (this.currentPolygon === this.state.shapes[i].polygon) {
+        this.setState({ selected: i });
+        break;
       }
     }
-
-    this.setState({ selected: newSelected});
   }
 
   setInput (input) {
@@ -124,11 +120,7 @@ class GMap extends React.Component {
 
   handleSelect(shapeNum, e) {
     // update state's selected polygon
-    for (let i = 0; i < this.state.shapes.length; i++) {
-      if (parseInt(Object.keys(this.state.shapes[i])[0]) === shapeNum) {
-        this.setCurrentShape(Object.values(this.state.shapes[i])[0][1]);
-      }
-    }
+    this.setCurrentShape(this.state.shapes[shapeNum].polygon);
   }
 
   geocodeAddress(address) {
@@ -150,9 +142,12 @@ class GMap extends React.Component {
     let totalArea = 0;
     let totalNominalPower = 0;
 
-    const shapes = this.state.shapes.map((shape, index) => {
-      const actualArea = Object.values(shape)[0][0];
-      const shapeNum = parseInt(Object.keys(shape)[0]);
+    const shapes = this.state.shapes.map((shape, shapeNum) => {
+      if (shape === null) {
+        return;
+      }
+
+      const actualArea = shape.area;
       const className = this.state.selected === shapeNum ? "selected data" : "data";
       const nominalPower = calculateNominalPower(actualArea);
 
@@ -165,7 +160,7 @@ class GMap extends React.Component {
           key={shapeNum}
           onClick={this.handleSelect.bind(this, shapeNum)}>
 
-          <th>Polygon {shapeNum}</th>
+          <th>Polygon {shapeNum +1}</th>
           <td>{Math.round(actualArea)}</td>
           <td>{Math.round(nominalPower)}</td>
         </tr>
