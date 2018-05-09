@@ -186,7 +186,9 @@ class GMap extends React.Component {
       <div className='parent-div'>
         {gif}
         <h3>Paul Angland Solar Calculator Prototype</h3>
-        <p>Use the "select area" prompt to draw a polygon representing solar panel placements.</p>
+        <p>Enter an address into the address bar and click search</p>
+        <p>Click the "select area" prompt to prepare to make your panels</p>
+        <p>Click on the screen to add the vertices of your panels, and close off the vertices to finish</p>
         <form className="form-group">
           <input type="text"
             id="address"

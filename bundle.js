@@ -18525,7 +18525,17 @@ var GMap = function (_React$Component) {
         _react2.default.createElement(
           'p',
           null,
-          'Use the "select area" prompt to draw a polygon representing solar panel placements.'
+          'Enter an address into the address bar and click search'
+        ),
+        _react2.default.createElement(
+          'p',
+          null,
+          'Click the "select area" prompt to prepare to make your panels'
+        ),
+        _react2.default.createElement(
+          'p',
+          null,
+          'Click on the screen to add the vertices of your panels, and close off the vertices to finish'
         ),
         _react2.default.createElement(
           'form',
