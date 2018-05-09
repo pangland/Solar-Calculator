@@ -1,5 +1,6 @@
 import React from 'react';
 import { calculateNominalPower } from '../util/nominal_power.js';
+import Gif from './gif';
 
 const mapOptions = {
   center: { lat: 42.381671, lng: -71.078107},
@@ -24,11 +25,14 @@ class GMap extends React.Component {
     this.beginPolygon = this.beginPolygon.bind(this);
     this.deletePolygon = this.deletePolygon.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
+    this.demonstration = this.demonstration.bind(this);
+    this.endDemonstration = this.endDemonstration.bind(this);
 
     this.state = {
       shapes: [],
       lifelongPolygonCount: 0,
-      selected: -1
+      selected: -1,
+      gifHidden: true
     };
   }
 
@@ -118,6 +122,15 @@ class GMap extends React.Component {
     this.geocodeAddress(address);
   }
 
+  demonstration(e) {
+    this.setState({ gifHidden: false });
+  }
+
+  endDemonstration(e) {
+    this.setState({ gifHidden: true });
+    debugger;
+  }
+
   handleSelect(shapeNum, e) {
     // update state's selected polygon
     this.setCurrentShape(this.state.shapes[shapeNum].polygon);
@@ -167,8 +180,11 @@ class GMap extends React.Component {
       );
     });
 
+    const gif = this.state.gifHidden ? null : <Gif hidden={this.state.gifHidden} endDemonstration={this.endDemonstration} />;
+
     return (
       <div className='parent-div'>
+        {gif}
         <h3>Paul Angland Solar Calculator Prototype</h3>
         <p>Use the "select area" prompt to draw a polygon representing solar panel placements.</p>
         <form className="form-group">
@@ -183,6 +199,7 @@ class GMap extends React.Component {
         <div className="polygon-buttons">
           <button onClick={this.beginPolygon}> Select Area </button>
           <button onClick={this.deletePolygon}> Delete Area </button>
+          <button onClick={this.demonstration}> Demonstration </button>
         </div>
 
         <div className='map' ref="map" style={mapStyle}>

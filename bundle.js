@@ -18286,6 +18286,10 @@ var _react2 = _interopRequireDefault(_react);
 
 var _nominal_power = __webpack_require__(28);
 
+var _gif = __webpack_require__(29);
+
+var _gif2 = _interopRequireDefault(_gif);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -18321,11 +18325,14 @@ var GMap = function (_React$Component) {
     _this.beginPolygon = _this.beginPolygon.bind(_this);
     _this.deletePolygon = _this.deletePolygon.bind(_this);
     _this.handleSelect = _this.handleSelect.bind(_this);
+    _this.demonstration = _this.demonstration.bind(_this);
+    _this.endDemonstration = _this.endDemonstration.bind(_this);
 
     _this.state = {
       shapes: [],
       lifelongPolygonCount: 0,
-      selected: -1
+      selected: -1,
+      gifHidden: true
     };
     return _this;
   }
@@ -18425,6 +18432,17 @@ var GMap = function (_React$Component) {
       this.geocodeAddress(address);
     }
   }, {
+    key: 'demonstration',
+    value: function demonstration(e) {
+      this.setState({ gifHidden: false });
+    }
+  }, {
+    key: 'endDemonstration',
+    value: function endDemonstration(e) {
+      this.setState({ gifHidden: true });
+      debugger;
+    }
+  }, {
     key: 'handleSelect',
     value: function handleSelect(shapeNum, e) {
       // update state's selected polygon
@@ -18493,9 +18511,12 @@ var GMap = function (_React$Component) {
         );
       });
 
+      var gif = this.state.gifHidden ? null : _react2.default.createElement(_gif2.default, { hidden: this.state.gifHidden, endDemonstration: this.endDemonstration });
+
       return _react2.default.createElement(
         'div',
         { className: 'parent-div' },
+        gif,
         _react2.default.createElement(
           'h3',
           null,
@@ -18532,6 +18553,11 @@ var GMap = function (_React$Component) {
             'button',
             { onClick: this.deletePolygon },
             ' Delete Area '
+          ),
+          _react2.default.createElement(
+            'button',
+            { onClick: this.demonstration },
+            ' Demonstration '
           )
         ),
         _react2.default.createElement(
@@ -18606,6 +18632,89 @@ var calculateNominalPower = exports.calculateNominalPower = function calculateNo
 
   return wattagePerMeter * area * .001;
 };
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(2);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Gif = function (_React$Component) {
+  _inherits(Gif, _React$Component);
+
+  function Gif(props) {
+    _classCallCheck(this, Gif);
+
+    var _this = _possibleConstructorReturn(this, (Gif.__proto__ || Object.getPrototypeOf(Gif)).call(this, props));
+
+    _this.handleOutsideClick = _this.handleOutsideClick.bind(_this);
+    return _this;
+  }
+
+  _createClass(Gif, [{
+    key: "componentDidMount",
+    value: function componentDidMount() {
+      this.gif = document.getElementById("gif");
+      this.modal = document.getElementById("parent");
+      document.addEventListener('mousedown', this.handleOutsideClick);
+      document.body.classList.add("backdrop");
+    }
+  }, {
+    key: "componentWillUnmount",
+    value: function componentWillUnmount() {
+      document.removeEventListener('mousedown', this.handleOutsideClick);
+    }
+  }, {
+    key: "handleOutsideClick",
+    value: function handleOutsideClick() {
+      if (!this.modal.contains(event.target)) {
+        this.props.endDemonstration();
+        document.body.classList.remove("backdrop");
+        this.gif.src = "";
+        this.gif.src = "./Peek 2018-05-09 02-04.gif";
+      }
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var className = this.props.hidden ? "gif hidden" : "gif";
+
+      return _react2.default.createElement(
+        "div",
+        { id: "parent", className: "gif-wrapping-div" },
+        _react2.default.createElement(
+          "h3",
+          null,
+          "Close demonstration by clicking off of the gif"
+        ),
+        _react2.default.createElement("img", { id: "gif", className: className, src: "./Peek 2018-05-09 02-04.gif" })
+      );
+    }
+  }]);
+
+  return Gif;
+}(_react2.default.Component);
+
+exports.default = Gif;
 
 /***/ })
 /******/ ]);
