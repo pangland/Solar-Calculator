@@ -18700,7 +18700,7 @@ var Gif = function (_React$Component) {
         this.props.endDemonstration();
         document.body.classList.remove("backdrop");
         this.gif.src = "";
-        this.gif.src = "./Peek 2018-05-09 02-04.gif";
+        this.gif.src = "./Peek 2018-05-09 02-04-2.gif";
       }
     }
   }, {
@@ -18716,7 +18716,7 @@ var Gif = function (_React$Component) {
           null,
           "Close demonstration by clicking off of the gif"
         ),
-        _react2.default.createElement("img", { id: "gif", className: className, src: "./Peek 2018-05-09 02-04.gif" })
+        _react2.default.createElement("img", { id: "gif", className: className, src: "./Peek 2018-05-09 02-04-2.gif" })
       );
     }
   }]);

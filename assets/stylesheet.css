@@ -47,7 +47,13 @@ ul {
 }
 
 .backdrop {
-  background-color: rgba(0,0,0,0.4);
+  background: gray;
+  /*background-color: rgba(0,0,0,0.4);*/
+  /*background-color: 70, 72, 82, 0.3*/
+  /*opacity: .5;*/
+  /*background-color: black;
+  background-blend-mode: screen;*/;
+  /*filter: blur(20px) grayscale(20%);*/
 }
 
 .data {
