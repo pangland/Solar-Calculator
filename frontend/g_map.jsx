@@ -47,6 +47,8 @@ class GMap extends React.Component {
       polygonOptions: polyOptions
     });
 
+    this.drawingManager.setMap(this.map);
+
     // this method and approach informed from code herein: http://jsfiddle.net/89u6owsz/
     google.maps.event.addListener(this.drawingManager, 'overlaycomplete', (e) => {
       // deactivate drawing mode
@@ -62,10 +64,9 @@ class GMap extends React.Component {
 
       this.setCurrentShape(e.overlay);
 
-      const currentPolygon = this.currentPolygon;
       const newAreaList = this.state.shapes;
 
-      newAreaList.push({polygon: currentPolygon, area: area});
+      newAreaList.push({polygon: this.currentPolygon, area: area});
 
       this.setState({
         shapes: newAreaList,
@@ -75,7 +76,6 @@ class GMap extends React.Component {
   }
 
   beginPolygon() {
-    this.drawingManager.setMap(this.map);
     this.drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
   }
 

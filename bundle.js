@@ -18354,6 +18354,8 @@ var GMap = function (_React$Component) {
         polygonOptions: polyOptions
       });
 
+      this.drawingManager.setMap(this.map);
+
       // this method and approach informed from code herein: http://jsfiddle.net/89u6owsz/
       google.maps.event.addListener(this.drawingManager, 'overlaycomplete', function (e) {
         // deactivate drawing mode
@@ -18369,10 +18371,9 @@ var GMap = function (_React$Component) {
 
         _this2.setCurrentShape(e.overlay);
 
-        var currentPolygon = _this2.currentPolygon;
         var newAreaList = _this2.state.shapes;
 
-        newAreaList.push({ polygon: currentPolygon, area: area });
+        newAreaList.push({ polygon: _this2.currentPolygon, area: area });
 
         _this2.setState({
           shapes: newAreaList,
@@ -18383,7 +18384,6 @@ var GMap = function (_React$Component) {
   }, {
     key: 'beginPolygon',
     value: function beginPolygon() {
-      this.drawingManager.setMap(this.map);
       this.drawingManager.setDrawingMode(google.maps.drawing.OverlayType.POLYGON);
     }
   }, {
@@ -18692,11 +18692,10 @@ var Table = function (_React$Component) {
           return;
         }
 
-        var actualArea = shape.area;
         var className = _this2.props.selected === shapeNum ? "selected data" : "data";
-        var nominalPower = (0, _nominal_power.calculateNominalPower)(actualArea);
+        var nominalPower = (0, _nominal_power.calculateNominalPower)(shape.area);
 
-        totalArea += actualArea;
+        totalArea += shape.area;
         totalNominalPower += nominalPower;
 
         return _react2.default.createElement(
@@ -18714,7 +18713,7 @@ var Table = function (_React$Component) {
           _react2.default.createElement(
             'td',
             null,
-            Math.round(actualArea)
+            Math.round(shape.area)
           ),
           _react2.default.createElement(
             'td',

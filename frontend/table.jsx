@@ -11,11 +11,10 @@ class Table extends React.Component {
         return;
       }
 
-      const actualArea = shape.area;
       const className = this.props.selected === shapeNum ? "selected data" : "data";
-      const nominalPower = calculateNominalPower(actualArea);
+      const nominalPower = calculateNominalPower(shape.area);
 
-      totalArea += actualArea;
+      totalArea += shape.area;
       totalNominalPower += nominalPower;
 
       return (
@@ -25,7 +24,7 @@ class Table extends React.Component {
           onClick={this.props.handleSelect.bind(this, shapeNum)}>
 
           <th>Polygon {shapeNum +1}</th>
-          <td>{Math.round(actualArea)}</td>
+          <td>{Math.round(shape.area)}</td>
           <td>{Math.round(nominalPower)}</td>
         </tr>
       );

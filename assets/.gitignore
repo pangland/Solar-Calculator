@@ -1,0 +1,6 @@
+/node_modules
+
+node_modules/
+.byebug_history
+.DS_Store
+npm-debug.log
