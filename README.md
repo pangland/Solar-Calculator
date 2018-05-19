@@ -2,7 +2,7 @@
 --------------------
 [Live](paulangland.info/Solar-Calculator)
 
-![Screenshot](/assets/Screenshot from 2018-05-18 22-25-40.png)
+![Screenshot](./assets/screenshot.png)
 ## Description ##
 This app is a simple solar calculator that enables users to calculate the approximate nominal power of solar panels placed on a given patch of land or rooftop. The user is provided a map and allowed to search for addresses and draw shapes on the map that correspond to collections of solar panels.
 
