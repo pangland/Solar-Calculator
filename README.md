@@ -7,7 +7,7 @@
 This app is a simple solar calculator that enables users to calculate the approximate nominal power of solar panels placed on a given patch of land or rooftop. The user is provided a map and allowed to search for addresses and draw shapes on the map that correspond to collections of solar panels.
 
 ## Implementation ##
-The application is a simple React application that incorporates the Google Map api, which provides both location lookup and the ability to draw shapes on the map. When a polygon is completed, the application adds a listener to the polygon so that, if clicked on, the google maps will select that polygon and state will update to reflect that this polygon is selected. Then, an object is created to represent that shape that contains the google map polygon reference and the area of that shape. That object is pushed into the state, and that shape is selected automatically on creation.
+The application is a simple React application that incorporates the Google Map API, which provides both location lookup and the ability to draw shapes on the map. When a polygon is completed, the application adds a listener to the polygon so that, if clicked on, the map will select that polygon and state will update to reflect that this polygon is selected. Then, an object is created to represent that shape that contains the map's polygon reference and the area of that shape. That object is pushed into the state, and that shape is selected automatically on creation.
 
 ```javascript
 google.maps.event.addListener(e.overlay, 'click', () => {
