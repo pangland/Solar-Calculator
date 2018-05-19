@@ -18284,11 +18284,13 @@ var _react = __webpack_require__(2);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _nominal_power = __webpack_require__(28);
-
 var _gif = __webpack_require__(29);
 
 var _gif2 = _interopRequireDefault(_gif);
+
+var _table = __webpack_require__(30);
+
+var _table2 = _interopRequireDefault(_table);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -18440,7 +18442,6 @@ var GMap = function (_React$Component) {
     key: 'endDemonstration',
     value: function endDemonstration(e) {
       this.setState({ gifHidden: true });
-      debugger;
     }
   }, {
     key: 'handleSelect',
@@ -18463,53 +18464,11 @@ var GMap = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      var _this4 = this;
-
       var mapStyle = {
         width: 800,
         height: 400,
         border: '1px solid black'
       };
-
-      var totalArea = 0;
-      var totalNominalPower = 0;
-
-      var shapes = this.state.shapes.map(function (shape, shapeNum) {
-        if (shape === null) {
-          return;
-        }
-
-        var actualArea = shape.area;
-        var className = _this4.state.selected === shapeNum ? "selected data" : "data";
-        var nominalPower = (0, _nominal_power.calculateNominalPower)(actualArea);
-
-        totalArea += actualArea;
-        totalNominalPower += nominalPower;
-
-        return _react2.default.createElement(
-          'tr',
-          {
-            className: className,
-            key: shapeNum,
-            onClick: _this4.handleSelect.bind(_this4, shapeNum) },
-          _react2.default.createElement(
-            'th',
-            null,
-            'Polygon ',
-            shapeNum + 1
-          ),
-          _react2.default.createElement(
-            'td',
-            null,
-            Math.round(actualArea)
-          ),
-          _react2.default.createElement(
-            'td',
-            null,
-            Math.round(nominalPower)
-          )
-        );
-      });
 
       var gif = this.state.gifHidden ? null : _react2.default.createElement(_gif2.default, { hidden: this.state.gifHidden, endDemonstration: this.endDemonstration });
 
@@ -18575,49 +18534,7 @@ var GMap = function (_React$Component) {
           { className: 'map', ref: 'map', style: mapStyle },
           'Temp Input'
         ),
-        _react2.default.createElement(
-          'table',
-          { className: this.state.shapes.length > 0 ? "" : "hide" },
-          _react2.default.createElement(
-            'tr',
-            null,
-            _react2.default.createElement(
-              'th',
-              null,
-              '\xA0'
-            ),
-            _react2.default.createElement(
-              'th',
-              null,
-              'Area (m^2)'
-            ),
-            _react2.default.createElement(
-              'th',
-              null,
-              'Nominal Power (kW)'
-            )
-          ),
-          shapes,
-          _react2.default.createElement(
-            'tr',
-            null,
-            _react2.default.createElement(
-              'th',
-              null,
-              'Total'
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              Math.round(totalArea)
-            ),
-            _react2.default.createElement(
-              'td',
-              null,
-              Math.round(totalNominalPower)
-            )
-          )
-        )
+        _react2.default.createElement(_table2.default, { shapes: this.state.shapes, selected: this.state.selected, handleSelect: this.handleSelect })
       );
     }
   }]);
@@ -18700,7 +18617,7 @@ var Gif = function (_React$Component) {
         this.props.endDemonstration();
         document.body.classList.remove("backdrop");
         this.gif.src = "";
-        this.gif.src = "./Peek 2018-05-09 02-04-2.gif";
+        this.gif.src = "./assets/Peek 2018-05-09 02-04-2.gif";
       }
     }
   }, {
@@ -18716,7 +18633,7 @@ var Gif = function (_React$Component) {
           null,
           "Close demonstration by clicking off of the gif"
         ),
-        _react2.default.createElement("img", { id: "gif", className: className, src: "./Peek 2018-05-09 02-04-2.gif" })
+        _react2.default.createElement("img", { id: "gif", className: className, src: "./assets/Peek 2018-05-09 02-04-2.gif" })
       );
     }
   }]);
@@ -18725,6 +18642,138 @@ var Gif = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = Gif;
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(2);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _nominal_power = __webpack_require__(28);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Table = function (_React$Component) {
+  _inherits(Table, _React$Component);
+
+  function Table() {
+    _classCallCheck(this, Table);
+
+    return _possibleConstructorReturn(this, (Table.__proto__ || Object.getPrototypeOf(Table)).apply(this, arguments));
+  }
+
+  _createClass(Table, [{
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
+
+      var totalArea = 0;
+      var totalNominalPower = 0;
+
+      var shapes = this.props.shapes.map(function (shape, shapeNum) {
+        if (shape === null) {
+          return;
+        }
+
+        var actualArea = shape.area;
+        var className = _this2.props.selected === shapeNum ? "selected data" : "data";
+        var nominalPower = (0, _nominal_power.calculateNominalPower)(actualArea);
+
+        totalArea += actualArea;
+        totalNominalPower += nominalPower;
+
+        return _react2.default.createElement(
+          'tr',
+          {
+            className: className,
+            key: shapeNum,
+            onClick: _this2.props.handleSelect.bind(_this2, shapeNum) },
+          _react2.default.createElement(
+            'th',
+            null,
+            'Polygon ',
+            shapeNum + 1
+          ),
+          _react2.default.createElement(
+            'td',
+            null,
+            Math.round(actualArea)
+          ),
+          _react2.default.createElement(
+            'td',
+            null,
+            Math.round(nominalPower)
+          )
+        );
+      });
+
+      return _react2.default.createElement(
+        'table',
+        { className: this.props.shapes.length > 0 ? "" : "hide" },
+        _react2.default.createElement(
+          'tr',
+          null,
+          _react2.default.createElement(
+            'th',
+            null,
+            '\xA0'
+          ),
+          _react2.default.createElement(
+            'th',
+            null,
+            'Area (m^2)'
+          ),
+          _react2.default.createElement(
+            'th',
+            null,
+            'Nominal Power (kW)'
+          )
+        ),
+        shapes,
+        _react2.default.createElement(
+          'tr',
+          null,
+          _react2.default.createElement(
+            'th',
+            null,
+            'Total'
+          ),
+          _react2.default.createElement(
+            'td',
+            null,
+            Math.round(totalArea)
+          ),
+          _react2.default.createElement(
+            'td',
+            null,
+            Math.round(totalNominalPower)
+          )
+        )
+      );
+    }
+  }]);
+
+  return Table;
+}(_react2.default.Component);
+
+exports.default = Table;
 
 /***/ })
 /******/ ]);

@@ -1,6 +1,6 @@
 import React from 'react';
-import { calculateNominalPower } from '../util/nominal_power.js';
 import Gif from './gif';
+import Table from './table';
 
 const mapOptions = {
   center: { lat: 42.381671, lng: -71.078107},
@@ -128,7 +128,6 @@ class GMap extends React.Component {
 
   endDemonstration(e) {
     this.setState({ gifHidden: true });
-    debugger;
   }
 
   handleSelect(shapeNum, e) {
@@ -151,34 +150,6 @@ class GMap extends React.Component {
       height: 400,
       border: '1px solid black'
     };
-
-    let totalArea = 0;
-    let totalNominalPower = 0;
-
-    const shapes = this.state.shapes.map((shape, shapeNum) => {
-      if (shape === null) {
-        return;
-      }
-
-      const actualArea = shape.area;
-      const className = this.state.selected === shapeNum ? "selected data" : "data";
-      const nominalPower = calculateNominalPower(actualArea);
-
-      totalArea += actualArea;
-      totalNominalPower += nominalPower;
-
-      return (
-        <tr
-          className={className}
-          key={shapeNum}
-          onClick={this.handleSelect.bind(this, shapeNum)}>
-
-          <th>Polygon {shapeNum +1}</th>
-          <td>{Math.round(actualArea)}</td>
-          <td>{Math.round(nominalPower)}</td>
-        </tr>
-      );
-    });
 
     const gif = this.state.gifHidden ? null : <Gif hidden={this.state.gifHidden} endDemonstration={this.endDemonstration} />;
 
@@ -208,19 +179,7 @@ class GMap extends React.Component {
           Temp Input
         </div>
 
-        <table className={this.state.shapes.length > 0 ? "" : "hide"}>
-          <tr>
-            <th>&nbsp;</th>
-            <th>Area (m^2)</th>
-            <th>Nominal Power (kW)</th>
-          </tr>
-          {shapes}
-          <tr>
-            <th>Total</th>
-            <td>{Math.round(totalArea)}</td>
-            <td>{Math.round(totalNominalPower)}</td>
-          </tr>
-        </table>
+        <Table shapes={this.state.shapes} selected={this.state.selected} handleSelect={this.handleSelect}/>
       </div>
     );
   }

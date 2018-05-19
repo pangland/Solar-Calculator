@@ -23,7 +23,7 @@ class Gif extends React.Component {
       this.props.endDemonstration();
       document.body.classList.remove("backdrop");
       this.gif.src = "";
-      this.gif.src = "./Peek 2018-05-09 02-04-2.gif";
+      this.gif.src = "./assets/Peek 2018-05-09 02-04-2.gif";
     }
   }
 
@@ -33,7 +33,7 @@ class Gif extends React.Component {
     return (
       <div id="parent" className="gif-wrapping-div">
         <h3>Close demonstration by clicking off of the gif</h3>
-        <img id="gif" className={className} src={"./Peek 2018-05-09 02-04-2.gif"} />
+        <img id="gif" className={className} src={"./assets/Peek 2018-05-09 02-04-2.gif"} />
       </div>
     );
   }
